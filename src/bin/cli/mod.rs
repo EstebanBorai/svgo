@@ -1,8 +1,7 @@
-use std::path::PathBuf;
+use std::{fs::File, path::PathBuf};
 
-use anyhow::{Context, Result};
+use anyhow::Result;
 use clap::Parser;
-use svgolib::optimize::{Optimization, Optimizer};
 
 #[derive(Debug, Parser)]
 #[command(
@@ -23,22 +22,8 @@ impl SvgoCli {
         }
 
         for file in self.files {
-            let content = std::fs::read_to_string(&file)?;
-            let original = svgolib::tokens(&content)?;
-            let mut optimizer = Optimizer::new();
-
-            optimizer.append(Optimization::RemoveDoctype);
-            optimizer.append(Optimization::RemoveComments);
-
-            let result = optimizer.apply(original)?;
-            let document = svgolib::into_document(result)?;
-            let mut buf = Vec::new();
-
-            svg::write(&mut buf, &document).context("Failed to write SVG")?;
-
-            let string = String::from_utf8(buf)?;
-
-            println!("{}", string);
+            let buf = File::open(&file)?;
+            svgolib::open(buf)?;
         }
 
         Ok(())
