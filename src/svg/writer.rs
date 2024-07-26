@@ -8,7 +8,7 @@ use super::node::{ElementType, Node};
 pub struct Writer;
 
 impl Writer {
-    pub fn write<W: Write>(out: W, nodes: Vec<Node>) -> Result<()> {
+    pub fn write<W: Write>(out: W, nodes: &Vec<Node>) -> Result<()> {
         let mut writer = EventWriter::new(out);
 
         for node in nodes {

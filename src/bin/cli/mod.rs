@@ -1,4 +1,4 @@
-use std::{fs::File, path::PathBuf};
+use std::{fs::File, io::stdout, path::PathBuf};
 
 use anyhow::Result;
 use clap::Parser;
@@ -23,8 +23,9 @@ impl SvgoCli {
 
         for file in self.files {
             let buf = File::open(&file)?;
-            let nodes = svgolib::open(buf)?;
-            svgolib::printout(nodes)?;
+            let svgo = svgolib::SvgOptimizer::open(buf)?;
+
+            svgo.write(stdout())?;
         }
 
         Ok(())
