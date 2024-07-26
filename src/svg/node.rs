@@ -50,21 +50,21 @@ impl Debug for Version {
 }
 
 /// Attributes in a SVG document [Element]
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Attribute {
     pub name: String,
     pub value: String,
 }
 
 /// Determines wether an element is an opening or closing tag
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum ElementType {
     Open,
     Close,
 }
 
 /// Elements/Tags in a SVG document tree
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Element {
     pub name: String,
     pub attributes: Vec<Attribute>,

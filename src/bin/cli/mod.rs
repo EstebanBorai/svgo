@@ -23,7 +23,8 @@ impl SvgoCli {
 
         for file in self.files {
             let buf = File::open(&file)?;
-            svgolib::open(buf)?;
+            let nodes = svgolib::open(buf)?;
+            svgolib::printout(nodes)?;
         }
 
         Ok(())
