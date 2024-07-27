@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+code {
+    @apply border border-emerald-800 text-sm bg-emerald-950/50 py-1 px-2 rounded-md my-2;
+    @apply mx-2;
+}
+
+p {
+    @apply py-2;
+}
+
+h2 {
+    @apply text-xl font-semibold pt-4 pb-1;
+    @apply border-b border-zinc-800 mb-3;
+}
+
+h3 {
+    @apply text-lg font-semibold py-4;
+}
+
+.navbar .link {
+    @apply block text-sm rounded-md px-4 py-2 border border-transparent;
+}
+
+.navbar .link:hover {
+    @apply cursor-pointer border-zinc-800;
+}
+
+.navbar .link-active {
+    @apply block bg-emerald-950 border border-emerald-800 text-sm rounded-md px-4 py-2;
+}
+
+.navbar .section-divider {
+    @apply block text-zinc-400 text-xs uppercase pt-2 pb-1 mb-1 border-b border-zinc-800;
+}
+
+button {
+    @apply bg-indigo-950 text-white rounded-md px-4 py-2;
+}

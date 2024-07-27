@@ -1,0 +1,27 @@
+name: clippy
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  clippy:
+    name: Runs "cargo clippy" on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Setup Rust Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: cargo clippy
+        run: cargo clippy -p svgo -- -D warnings

@@ -1,0 +1,28 @@
+[package]
+name = "web"
+version = "0.0.0"
+edition = "2021"
+authors = ["Esteban Borai <estebanborai@gmail.com>"]
+publish = false
+description = "GitHub Page for SVGO Crate"
+license = "MIT"
+
+[lib]
+name = "web"
+path = "src/lib.rs"
+
+[[bin]]
+name = "svgo-web"
+path = "src/bin/main.rs"
+
+[dependencies]
+leptos = { version = "0.6", features = ["csr"] }
+leptos_meta = { version = "0.6", features = ["csr"] }
+
+# Local Dependencies
+svgo = { path = "../svgo" }
+
+[dev-dependencies]
+wasm-bindgen = "0.2"
+wasm-bindgen-test = "0.3"
+web-sys = "0.3"
