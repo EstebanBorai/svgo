@@ -1,0 +1,27 @@
+[package]
+name = "svgo"
+version = "0.0.0"
+edition = "2021"
+description = "SVG Optimizer for Rust"
+categories = ["command-line-utilities"]
+homepage = "https://github.com/EstebanBorai/svgo"
+repository = "https://github.com/EstebanBorai/svgo"
+readme = "README.md"
+keywords = ["svg", "optimization"]
+license = "MIT OR Apache-2.0"
+authors = ["Esteban Borai <estebanborai@gmail.com>"]
+
+[lib]
+name = "svgolib"
+path = "src/lib.rs"
+
+[[bin]]
+name = "svgo"
+path = "src/bin/main.rs"
+
+[dependencies]
+anyhow = "1.0.86"
+clap = { version = "4.5.2", features = ["std", "derive", "env"] }
+tracing = "0.1.40"
+tracing-subscriber = "0.3.18"
+xml-rs = "0.8.20"
