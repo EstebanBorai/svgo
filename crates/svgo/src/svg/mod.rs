@@ -21,6 +21,13 @@ impl Svg {
         Ok(Self(nodes))
     }
 
+    /// Reads a SVG document from a [`std::io::Read`] instance.
+    pub fn read<R: std::io::Read>(raw: R) -> Result<Self> {
+        let nodes = Parser::read(raw)?;
+
+        Ok(Self(nodes))
+    }
+
     /// Writes the SVG document to a [`std::io::Write`] instance.
     pub fn write<W: std::io::Write>(&self, write: W) -> Result<()> {
         Writer::write(write, &self.0)

@@ -1,6 +1,7 @@
 //! XML Nodes and Elements for SVG documents
 //! Read more: https://developer.mozilla.org/en-US/docs/Web/XML/XML_introduction
 
+use std::collections::HashSet;
 use std::fmt::{Debug, Display};
 use std::str::FromStr;
 
@@ -50,7 +51,7 @@ impl Debug for Version {
 }
 
 /// Attributes in a SVG document [Element]
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Hash, Eq, PartialEq)]
 pub struct Attribute {
     pub name: String,
     pub value: String,
@@ -67,7 +68,7 @@ pub enum ElementType {
 #[derive(Clone, Debug)]
 pub struct Element {
     pub name: String,
-    pub attributes: Vec<Attribute>,
+    pub attributes: HashSet<Attribute>,
     pub r#type: ElementType,
 }
 

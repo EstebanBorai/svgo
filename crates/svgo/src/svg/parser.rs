@@ -1,9 +1,9 @@
 //! XML Parser for SVG documents
 
-use std::io::{BufReader, Read};
+use std::{collections::HashSet, io::{BufReader, Read}};
 
 use anyhow::Result;
-use xml::{reader::XmlEvent, ParserConfig};
+use xml::{name::OwnedName, reader::XmlEvent, ParserConfig};
 
 use super::node::{Attribute, Element, ElementType, Node};
 
@@ -43,7 +43,7 @@ impl Parser {
                         attributes: attributes
                             .iter()
                             .map(|attr| Attribute {
-                                name: attr.name.local_name.clone(),
+                                name: fully_qualified_attr_name(&attr.name),
                                 value: attr.value.clone(),
                             })
                             .collect(),
@@ -55,7 +55,7 @@ impl Parser {
                     let element = Element {
                         r#type: ElementType::Close,
                         name: name.local_name,
-                        attributes: Vec::new(),
+                        attributes: HashSet::new(),
                     };
 
                     els.push(Node::Element(element));
@@ -92,4 +92,21 @@ impl From<xml::common::XmlVersion> for super::node::Version {
             xml::common::XmlVersion::Version11 => Self::Version11,
         }
     }
+}
+
+fn fully_qualified_attr_name(on: &OwnedName) -> String {
+    if on.namespace.is_some() {
+        if let Some(ref prefix) = on.prefix {
+            // xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+            return format!("{}:{}", prefix, on.local_name);
+        }
+    }
+
+    if let Some(ref prefix) = on.prefix {
+        // inkscape:version="1.0"
+        return format!("{}:{}", prefix, on.local_name);
+    }
+
+    // xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+    on.local_name.to_owned()
 }
