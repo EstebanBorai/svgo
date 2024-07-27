@@ -1,11 +1,15 @@
+pub mod optimization;
+
 use std::collections::HashSet;
 
-use crate::svg::node::Node;
+use crate::svg::Svg;
+
+use self::optimization::remove_comments::RemoveCommentsOptimization;
 
 #[derive(Debug, Hash, Eq, PartialEq)]
 pub enum Optimization {
-    RemoveComments,
-    RemoveDoctype,
+    /// Remove all comments from the SVG document.
+    RemoveComments(RemoveCommentsOptimization),
 }
 
 pub struct Optimizer {
@@ -29,13 +33,15 @@ impl Optimizer {
         self.optimizations.insert(optimization);
     }
 
-    pub fn apply(self, tokens: Vec<Node>) -> anyhow::Result<Vec<Node>> {
-        let tokens = tokens;
-
+    pub fn apply(&self, svg: &mut Svg) -> anyhow::Result<()> {
         for optimization in &self.optimizations {
-            todo!()
+            match optimization {
+                Optimization::RemoveComments(optimization) => {
+                    optimization.apply(svg)?;
+                }
+            }
         }
 
-        Ok(tokens)
+        Ok(())
     }
 }
