@@ -84,6 +84,10 @@ pub enum Node {
     },
     /// Tag element in a SVG document
     Element(Element),
+    /// `CDATA` section in a SVG document
+    CData(String),
     /// Comment in a SVG document
     Comment(String),
+    /// Arbitrary characters in a SVG document
+    Characters(String),
 }

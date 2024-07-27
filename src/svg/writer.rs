@@ -63,8 +63,18 @@ impl Writer {
                 }
                 Node::Comment(value) => {
                     writer
-                        .write(XmlEvent::Comment(&value))
+                        .write(XmlEvent::Comment(value))
                         .context("Failed to write SVG comment")?;
+                }
+                Node::CData(value) => {
+                    writer
+                        .write(XmlEvent::CData(value))
+                        .context("Failed to write SVG CDATA")?;
+                }
+                Node::Characters(value) => {
+                    writer
+                        .write(XmlEvent::Characters(value))
+                        .context("Failed to write SVG characters")?;
                 }
             }
         }

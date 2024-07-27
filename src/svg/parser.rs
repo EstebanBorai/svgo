@@ -14,6 +14,9 @@ impl Parser {
     pub fn read<R: Read>(r: R) -> Result<Vec<Node>> {
         let parser = ParserConfig::new()
             .ignore_comments(false)
+            .ignore_end_of_stream(false)
+            .ignore_root_level_whitespace(false)
+            .ignore_invalid_encoding_declarations(false)
             .create_reader(BufReader::new(r));
         let mut els = Vec::new();
 
@@ -60,6 +63,17 @@ impl Parser {
                 XmlEvent::Comment(value) => {
                     let node = Node::Comment(value);
                     els.push(node);
+                }
+                XmlEvent::CData(value) => {
+                    let node = Node::CData(value);
+                    els.push(node);
+                }
+                XmlEvent::Whitespace(value) | XmlEvent::Characters(value) => {
+                    let node = Node::Characters(value);
+                    els.push(node);
+                }
+                XmlEvent::EndDocument => {
+                    // Do nothing
                 }
                 _ => {
                     tracing::warn!("Ignoring event: {:?}", ev);
