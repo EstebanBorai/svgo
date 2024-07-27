@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-    SVG Optimizer for Rust and WebAssembly (WASM)
+    SVG Optimizer for Rust & WebAssembly (WASM)
 </p>
 
 <p align="center" dir="auto">
