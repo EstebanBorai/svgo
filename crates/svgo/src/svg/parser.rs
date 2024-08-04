@@ -37,7 +37,6 @@ impl Parser {
                 XmlEvent::StartElement {
                     name, attributes, ..
                 } => {
-                    println!("{:#?}", attributes);
                     let element = Element {
                         r#type: ElementType::Open,
                         name: name.local_name,

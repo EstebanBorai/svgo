@@ -120,6 +120,7 @@ impl Attribute {
 
 impl From<OwnedAttribute> for Attribute {
     fn from(attr: OwnedAttribute) -> Self {
+        println!("{:?}", attr);
         if let Some(ns) = attr.name.namespace {
             Self::Namespaced {
                 key: attr.name.local_name,

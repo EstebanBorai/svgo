@@ -39,10 +39,20 @@ impl Writer {
                                 name: Name::local(key.as_str()),
                                 value: value.as_str(),
                             },
-                            _ => xml::attribute::Attribute {
-                                name: Name::local(""),
-                                value: "",
+                            Attribute::Namespaced {
+                                key,
+                                value,
+                                namespace,
+                                prefix,
+                            } => xml::attribute::Attribute {
+                                name: Name::qualified(
+                                    key,
+                                    namespace,
+                                    prefix.as_ref().map(|p| p.as_str()),
+                                ),
+                                value: value.as_str(),
                             },
+                            _ => todo!(),
                         })
                         .collect();
 

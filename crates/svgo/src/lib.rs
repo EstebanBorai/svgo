@@ -27,6 +27,13 @@ impl SvgOptimizer {
         Ok(Self::new(svg, optimizer))
     }
 
+    pub fn read<R: std::io::Read>(read: R) -> Result<Self> {
+        let svg = Svg::read(read)?;
+        let optimizer = Optimizer::default();
+
+        Ok(Self::new(svg, optimizer))
+    }
+
     /// Writes the underlying [`Svg`] to a [`std::io::Write`] instance.
     pub fn write<W: std::io::Write>(&self, write: W) -> Result<()> {
         self.svg.write(write)
@@ -42,9 +49,4 @@ impl SvgOptimizer {
     pub fn add_optimization(&mut self, optim: Optimization) {
         self.optimizer.append(optim);
     }
-}
-
-#[cfg(test)]
-pub mod fixtures {
-    pub const JAPAN_SVG: &[u8] = include_bytes!("../fixtures/japan.svg");
 }

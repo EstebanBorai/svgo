@@ -1328,6 +1328,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "test"
+version = "0.0.0"
+dependencies = [
+ "svgo",
+]
+
+[[package]]
 name = "thiserror"
 version = "1.0.63"
 source = "registry+https://github.com/rust-lang/crates.io-index"

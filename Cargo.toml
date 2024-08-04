@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "crates/svgo",
+    "crates/test",
     "crates/web"
 ]
 resolver = "1"
