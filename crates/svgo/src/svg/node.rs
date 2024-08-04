@@ -103,7 +103,7 @@ impl Attribute {
                     key
                 }
             }
-            Self::Declaration { key, .. } => key,
+            Self::Declaration { key, .. } => &format!("{}:{}", "xmlns", key),
         };
 
         value.to_owned()
@@ -120,7 +120,6 @@ impl Attribute {
 
 impl From<OwnedAttribute> for Attribute {
     fn from(attr: OwnedAttribute) -> Self {
-        println!("{:?}", attr);
         if let Some(ns) = attr.name.namespace {
             Self::Namespaced {
                 key: attr.name.local_name,

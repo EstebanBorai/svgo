@@ -3,7 +3,7 @@
 use std::io::{BufReader, Read};
 
 use anyhow::Result;
-use xml::{reader::XmlEvent, ParserConfig};
+use xml::{namespace::Namespace, reader::XmlEvent, ParserConfig};
 
 use super::node::{Attribute, Element, ElementType, Node};
 
@@ -35,15 +35,43 @@ impl Parser {
                     els.push(node);
                 }
                 XmlEvent::StartElement {
-                    name, attributes, ..
+                    name,
+                    attributes,
+                    namespace,
                 } => {
+                    let mut attributes: Vec<Attribute> = attributes
+                        .iter()
+                        .map(|attr| Attribute::from(attr.to_owned()))
+                        .collect();
+
+                    if name.local_name == "svg" {
+                        let Namespace(btree) = namespace;
+
+                        btree.iter().for_each(|(k, v)| {
+                            if k == "xmlns" {
+                                // Introduced by the XML parser (xml-rs)
+                                return;
+                            }
+
+                            let key = if k.is_empty() {
+                                // Interestingly the XML parser (xml-rs) does not provide the
+                                // key for the default namespace. It is empty.
+                                "xmlns"
+                            } else {
+                                k
+                            };
+
+                            attributes.push(Attribute::Declaration {
+                                key: key.to_owned(),
+                                value: v.to_owned(),
+                            });
+                        });
+                    }
+
                     let element = Element {
                         r#type: ElementType::Open,
                         name: name.local_name,
-                        attributes: attributes
-                            .iter()
-                            .map(|attr| Attribute::from(attr.to_owned()))
-                            .collect(),
+                        attributes,
                     };
 
                     els.push(Node::Element(element));

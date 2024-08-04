@@ -52,7 +52,10 @@ impl Writer {
                                 ),
                                 value: value.as_str(),
                             },
-                            _ => todo!(),
+                            Attribute::Declaration { key, value } => xml::attribute::Attribute {
+                                name: Name::qualified(key, value, Some("xmlns")),
+                                value: value.as_str(),
+                            },
                         })
                         .collect();
 
