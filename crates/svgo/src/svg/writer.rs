@@ -3,7 +3,7 @@ use std::{borrow::Cow, io::Write};
 use anyhow::{Context, Result};
 use xml::{common::XmlVersion, name::Name, namespace::Namespace, writer::XmlEvent, EventWriter};
 
-use super::node::{ElementType, Node};
+use super::node::{Attribute, ElementType, Node};
 
 pub struct Writer;
 
@@ -34,13 +34,15 @@ impl Writer {
                     let attributes = element
                         .attributes
                         .iter()
-                        .map(|attr| {
-                            let name = Name::local(attr.name.as_str());
-
-                            xml::attribute::Attribute {
-                                name,
-                                value: attr.value.as_str(),
-                            }
+                        .map(|attr| match attr {
+                            Attribute::Local { key, value } => xml::attribute::Attribute {
+                                name: Name::local(key.as_str()),
+                                value: value.as_str(),
+                            },
+                            _ => xml::attribute::Attribute {
+                                name: Name::local(""),
+                                value: "",
+                            },
                         })
                         .collect();
 

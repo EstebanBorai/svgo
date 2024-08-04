@@ -37,15 +37,13 @@ impl Parser {
                 XmlEvent::StartElement {
                     name, attributes, ..
                 } => {
+                    println!("{:#?}", attributes);
                     let element = Element {
                         r#type: ElementType::Open,
                         name: name.local_name,
                         attributes: attributes
                             .iter()
-                            .map(|attr| Attribute {
-                                name: attr.name.local_name.clone(),
-                                value: attr.value.clone(),
-                            })
+                            .map(|attr| Attribute::from(attr.to_owned()))
                             .collect(),
                     };
 
