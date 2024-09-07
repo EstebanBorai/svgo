@@ -27,6 +27,12 @@ impl Writer {
                         })
                         .context("Failed to write SVG Start Document")?;
                 }
+                Node::Doctype(value) => {
+                    writer
+                        .inner_mut()
+                        .write(value.as_bytes())
+                        .context("Failed to write SVG characters")?;
+                }
                 Node::Element(element) => {
                     let name = element.name.as_str();
                     let name = Name::local(name);

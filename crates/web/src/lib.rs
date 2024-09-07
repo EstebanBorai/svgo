@@ -6,6 +6,6 @@ pub fn App() -> impl IntoView {
     provide_meta_context();
 
     view! {
-        <Title text="SVG Optimizer | UI for the Rust SVGO Crate"/>
+        <Title text="SVGO | SVG Optimizer for Rust & WebAssembly (WASM)"/>
     }
 }

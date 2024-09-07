@@ -3,11 +3,11 @@ name = "svgo"
 version = "0.0.1"
 edition = "2021"
 description = "SVG Optimizer for Rust"
-categories = ["command-line-utilities"]
+categories = ["command-line-utilities", "web-programming"]
 homepage = "https://github.com/EstebanBorai/svgo"
 repository = "https://github.com/EstebanBorai/svgo"
 readme = "../../README.md"
-keywords = ["svg", "optimization"]
+keywords = ["svg", "cli", "wasm", "optimizer", "svgo"]
 license = "MIT OR Apache-2.0"
 authors = ["Esteban Borai <estebanborai@gmail.com>"]
 
@@ -24,4 +24,4 @@ anyhow = "1.0.86"
 clap = { version = "4.5.2", features = ["std", "derive", "env"] }
 tracing = "0.1.40"
 tracing-subscriber = "0.3.18"
-xml-rs = "0.8.20"
+xml-rs = { git = "https://github.com/kornelski/xml-rs.git", rev = "6ec208f" }
