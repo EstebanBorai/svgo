@@ -50,21 +50,21 @@ impl Debug for Version {
 }
 
 /// Attributes in a SVG document [Element]
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Attribute {
     pub name: String,
     pub value: String,
 }
 
 /// Determines wether an element is an opening or closing tag
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum ElementType {
     Open,
     Close,
 }
 
 /// Elements/Tags in a SVG document tree
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Element {
     pub name: String,
     pub attributes: Vec<Attribute>,
@@ -72,7 +72,7 @@ pub struct Element {
 }
 
 /// Nodes in a SVG document
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum Node {
     /// XML - declaration is not a tag. It is used for the transmission
     /// of the meta-data of a document.
@@ -82,6 +82,8 @@ pub enum Node {
         /// Used encoding in this document.
         encoding: String,
     },
+    /// The `DOCTYPE` declaration in a SVG document
+    Doctype(String),
     /// Tag element in a SVG document
     Element(Element),
     /// `CDATA` section in a SVG document

@@ -12,17 +12,16 @@ pub struct Parser;
 
 impl Parser {
     pub fn read<R: Read>(r: R) -> Result<Vec<Node>> {
-        let parser = ParserConfig::new()
+        let mut parser = ParserConfig::new()
             .ignore_comments(false)
             .ignore_end_of_stream(false)
             .ignore_root_level_whitespace(false)
             .ignore_invalid_encoding_declarations(false)
             .create_reader(BufReader::new(r));
         let mut els = Vec::new();
+        let mut is_doctype_grabbed = false;
 
-        for ev in parser {
-            let ev = ev.map_err(|e| anyhow::anyhow!("Error reading XML: {:?}", e))?;
-
+        while let Ok(ev) = parser.next() {
             match ev {
                 XmlEvent::StartDocument {
                     version, encoding, ..
@@ -49,6 +48,13 @@ impl Parser {
                             .collect(),
                     };
 
+                    if let Some(doctype) = parser.doctype() {
+                        if !is_doctype_grabbed {
+                            els.push(Node::Doctype(doctype.to_string()));
+                            is_doctype_grabbed = true;
+                        }
+                    }
+
                     els.push(Node::Element(element));
                 }
                 XmlEvent::EndElement { name, .. } => {
@@ -73,7 +79,7 @@ impl Parser {
                     els.push(node);
                 }
                 XmlEvent::EndDocument => {
-                    // Do nothing
+                    break;
                 }
                 _ => {
                     tracing::warn!("Ignoring event: {:?}", ev);

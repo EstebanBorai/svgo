@@ -1817,9 +1817,8 @@ dependencies = [
 
 [[package]]
 name = "xml-rs"
-version = "0.8.20"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "791978798f0597cfc70478424c2b4fdc2b7a8024aaff78497ef00f24ef674193"
+version = "0.8.21"
+source = "git+https://github.com/kornelski/xml-rs.git?rev=6ec208f#6ec208f460d650f8e743dd0670ebc9d75ca5ccd8"
 
 [[package]]
 name = "xxhash-rust"
