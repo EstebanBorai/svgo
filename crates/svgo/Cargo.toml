@@ -12,7 +12,7 @@ license = "MIT OR Apache-2.0"
 authors = ["Esteban Borai <estebanborai@gmail.com>"]
 
 [lib]
-name = "svgolib"
+name = "svgo"
 path = "src/lib.rs"
 
 [[bin]]

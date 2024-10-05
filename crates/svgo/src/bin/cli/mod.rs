@@ -23,7 +23,7 @@ impl SvgoCli {
 
         for file in self.files {
             let buf = File::open(&file)?;
-            let mut svgo = svgolib::SvgOptimizer::open(buf)?;
+            let mut svgo = svgo::SvgOptimizer::open(buf)?;
 
             // svgo.add_optimization(Optimization::RemoveComments(RemoveCommentsOptimization));
             svgo.optimize()?;
