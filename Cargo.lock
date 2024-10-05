@@ -1295,7 +1295,7 @@ checksum = "7da8b5736845d9f2fcb837ea5d9e2628564b3b043a70948a3f0b778838c5fb4f"
 
 [[package]]
 name = "svgo"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "anyhow",
  "clap",
@@ -1682,7 +1682,7 @@ dependencies = [
 
 [[package]]
 name = "web"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "leptos",
  "leptos_meta",
