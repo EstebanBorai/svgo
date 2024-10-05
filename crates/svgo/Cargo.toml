@@ -1,6 +1,6 @@
 [package]
 name = "svgo"
-version = "0.0.2"
+version = "0.0.3"
 edition = "2021"
 description = "SVG Optimizer for Rust"
 categories = ["command-line-utilities", "web-programming"]
