@@ -3,9 +3,6 @@ use std::{fs::File, io::stdout, path::PathBuf};
 use anyhow::Result;
 use clap::Parser;
 
-use svgolib::optimizer::optimization::RemoveCommentsOptimization;
-use svgolib::optimizer::Optimization;
-
 #[derive(Debug, Parser)]
 #[command(
     name = "svgo",
@@ -28,7 +25,7 @@ impl SvgoCli {
             let buf = File::open(&file)?;
             let mut svgo = svgolib::SvgOptimizer::open(buf)?;
 
-            svgo.add_optimization(Optimization::RemoveComments(RemoveCommentsOptimization));
+            // svgo.add_optimization(Optimization::RemoveComments(RemoveCommentsOptimization));
             svgo.optimize()?;
             svgo.write(stdout())?;
         }
