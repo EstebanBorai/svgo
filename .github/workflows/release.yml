@@ -60,7 +60,7 @@ jobs:
 
       - name: Set Crate Version as Environment Variable
         run: |
-          CARGO_TOML_VERSION=$(awk -F ' = ' '$1 ~ /version/ { gsub(/[\"]/, "", $2); printf("%s",$2) }' Cargo.toml)
+          CARGO_TOML_VERSION=$(awk -F ' = ' '$1 ~ /version/ { gsub(/[\"]/, "", $2); printf("%s",$2) }' ./crates/svgo/Cargo.toml)
           echo "CRATE_VERSION=$CARGO_TOML_VERSION" >> $GITHUB_ENV
 
       - name: Create Commit
