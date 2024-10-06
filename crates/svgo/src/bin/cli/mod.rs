@@ -4,6 +4,7 @@ use anyhow::Result;
 use clap::Parser;
 
 use svgo::optimizer::optimization::RemoveCommentsOptimization;
+use svgo::optimizer::optimization::RemoveDoctypeOptimization;
 use svgo::optimizer::Optimization;
 
 #[derive(Debug, Parser)]
@@ -17,7 +18,11 @@ pub struct SvgoCli {
     /// Space separated list of SVGs to optimize
     pub files: Vec<PathBuf>,
     /// Removes Comments from SVG
+    #[clap(long)]
     pub remove_comments: bool,
+    /// Removes DOCTYPE from SVG
+    #[clap(long)]
+    pub remove_doctype: bool,
 }
 
 impl SvgoCli {
@@ -32,6 +37,10 @@ impl SvgoCli {
 
             if self.remove_comments {
                 svgo.add_optimization(Optimization::RemoveComments(RemoveCommentsOptimization));
+            }
+
+            if self.remove_doctype {
+                svgo.add_optimization(Optimization::RemoveDoctype(RemoveDoctypeOptimization));
             }
 
             svgo.optimize()?;

@@ -63,7 +63,7 @@ contribute to the project by implementing any of these features.
 
 - [x] Comments
 - [ ] `<desc>` tags
-- [ ] `Doctype`
+- [x] `Doctype`
 - [ ] Editor Data
 - [ ] Empty Attributes
 - [ ] Empty Containers
