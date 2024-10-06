@@ -5,11 +5,14 @@ use std::collections::HashSet;
 use crate::svg::Svg;
 
 use self::optimization::remove_comments::RemoveCommentsOptimization;
+use self::optimization::remove_doctype::RemoveDoctypeOptimization;
 
 #[derive(Debug, Hash, Eq, PartialEq)]
 pub enum Optimization {
     /// Remove all comments from the SVG document.
     RemoveComments(RemoveCommentsOptimization),
+    /// Remove Doctype declaration from the SVG document.
+    RemoveDoctype(RemoveDoctypeOptimization),
 }
 
 pub struct Optimizer {
@@ -37,6 +40,9 @@ impl Optimizer {
         for optimization in &self.optimizations {
             match optimization {
                 Optimization::RemoveComments(optimization) => {
+                    optimization.apply(svg)?;
+                }
+                Optimization::RemoveDoctype(optimization) => {
                     optimization.apply(svg)?;
                 }
             }
