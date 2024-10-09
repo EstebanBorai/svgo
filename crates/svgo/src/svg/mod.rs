@@ -15,9 +15,16 @@ pub struct Svg(pub(crate) Vec<Node>);
 impl Svg {
     /// Opens a SVG file from a [`File`] and creates an instance of [`Svg`]
     /// with it if valid.
+    ///
+    /// This is exactly the same as [`Svg::read`] but with a [`File`] param
+    /// instead of a generic reader.
     pub fn open(buf: File) -> Result<Self> {
-        let nodes = Parser::read(buf)?;
+        Self::read(buf)
+    }
 
+    /// Reads a SVG file from a [`Read`] impl and attempts to create a `Svg` from it
+    pub fn read<R: std::io::Read>(r: R) -> Result<Self> {
+        let nodes = Parser::read(r)?;
         Ok(Self(nodes))
     }
 

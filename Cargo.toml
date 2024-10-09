@@ -1,8 +1,10 @@
 [workspace]
 members = [
     "crates/svgo",
+    "crates/test",
     "crates/web"
 ]
+default-members = ["crates/svgo"]
 resolver = "1"
 
 [workspace.dependencies]
