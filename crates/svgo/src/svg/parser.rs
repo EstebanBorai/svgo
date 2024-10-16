@@ -36,16 +36,13 @@ impl Parser {
                 XmlEvent::StartElement {
                     name, attributes, ..
                 } => {
+                    let attributes: Vec<Attribute> =
+                        attributes.into_iter().map(Attribute::from).collect();
+
                     let element = Element {
                         r#type: ElementType::Open,
                         name: name.local_name,
-                        attributes: attributes
-                            .iter()
-                            .map(|attr| Attribute {
-                                name: attr.name.local_name.clone(),
-                                value: attr.value.clone(),
-                            })
-                            .collect(),
+                        attributes,
                     };
 
                     if let Some(doctype) = parser.doctype() {
