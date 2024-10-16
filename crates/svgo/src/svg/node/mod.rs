@@ -4,8 +4,6 @@
 use std::fmt::{Debug, Display};
 use std::str::FromStr;
 
-use xml::attribute::OwnedAttribute;
-
 const XML_VERSION_1_0: &str = "1.0";
 const XML_VERSION_1_1: &str = "1.1";
 
@@ -51,34 +49,13 @@ impl Debug for Version {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+/// Attributes in a SVG document [Element]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Attribute {
-    /// Plain attribute in SVG document [Element]
-    ///
-    /// # Example
-    ///
-    /// `fill="#000000"`
-    ///
-    /// # Mapping:
-    ///
-    /// - key: `fill`
-    /// - value: `#000000`
     Local {
         key: String,
         value: String,
     },
-    /// Namespaced attributes in a SVG document [Element]
-    ///
-    /// # Example
-    ///
-    /// `xml:space="preserve"`
-    ///
-    /// # Mapping:
-    ///
-    /// - key: `space`
-    /// - prefix: `xml`
-    /// - value: `preserve`
-    /// - namespace: `http://www.w3.org/XML/1998/namespace`
     Namespaced {
         key: String,
         value: String,
@@ -91,63 +68,40 @@ pub enum Attribute {
     },
 }
 
-impl Attribute {
-    pub fn key(&self) -> String {
-        let value = match self {
-            Self::Local { key, .. } => key,
-            Self::Namespaced { key, prefix, .. } => {
-                if let Some(prefix) = prefix {
-                    &format!("{}:{}", prefix, key)
-                } else {
-                    key
-                }
-            }
-            Self::Declaration { key, .. } => &format!("{}:{}", "xmlns", key),
-        };
-        value.to_owned()
-    }
-    pub fn value(&self) -> &str {
+impl Display for Attribute {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::Local { value, .. } => value,
-            Self::Namespaced { value, .. } => value,
-            Self::Declaration { value, .. } => value,
-        }
-    }
-}
-impl From<OwnedAttribute> for Attribute {
-    fn from(attr: OwnedAttribute) -> Self {
-        if let Some(ns) = attr.name.namespace {
-            Self::Namespaced {
-                key: attr.name.local_name,
-                prefix: attr.name.prefix,
-                value: attr.value,
-                namespace: ns,
+            Self::Local { key, value } | Self::Declaration { key, value } => {
+                write!(f, "{}=\"{}\"", key, value)
             }
-        } else {
-            Self::Local {
-                key: attr.name.local_name,
-                value: attr.value,
+            Self::Namespaced {
+                key, value, prefix, ..
+            } => {
+                if let Some(p) = prefix {
+                    write!(f, "{}:{}=\"{}\"", p, key, value)
+                } else {
+                    write!(f, "{}=\"{}\"", key, value)
+                }
             }
         }
     }
 }
 
-impl Display for Attribute {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let value = match self {
-            Self::Local { key, value } => format!("{}=\"{}\"", key, value),
+impl From<xml::attribute::OwnedAttribute> for Attribute {
+    fn from(value: xml::attribute::OwnedAttribute) -> Self {
+        if let Some(prefix) = value.name.prefix {
             Self::Namespaced {
-                key, value, prefix, ..
-            } => {
-                if let Some(prefix) = prefix {
-                    format!("{}:{}=\"{}\"", prefix, key, value)
-                } else {
-                    format!("{}=\"{}\"", key, value)
-                }
+                key: value.name.local_name,
+                value: value.value,
+                prefix: Some(prefix),
+                namespace: value.name.namespace.unwrap_or_default(),
             }
-            Self::Declaration { key, value } => format!("{}=\"{}\"", key, value),
-        };
-        write!(f, "{}", value)
+        } else {
+            Self::Local {
+                key: value.name.local_name,
+                value: value.value,
+            }
+        }
     }
 }
 
@@ -192,6 +146,7 @@ pub enum Node {
 #[cfg(test)]
 mod test {
     use super::Attribute;
+
     #[test]
     fn stringify_local_attributes() {
         let attr = vec![
@@ -242,8 +197,8 @@ mod test {
                 Attribute::Namespaced {
                     key: "label".to_string(),
                     value: "Layer 1".to_string(),
-                    namespace: "http://www.inkscape.org/namespaces/inkscape".to_string(),
                     prefix: Some("inkscape".to_string()),
+                    namespace: "http://www.inkscape.org/namespaces/inkscape".to_string(),
                 },
                 "inkscape:label=\"Layer 1\"",
             ),
@@ -251,8 +206,8 @@ mod test {
                 Attribute::Namespaced {
                     key: "nodetypes".to_string(),
                     value: "csssscsccscssscccc".to_string(),
-                    namespace: "http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd".to_string(),
                     prefix: Some("sodipodi".to_string()),
+                    namespace: "http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd".to_string(),
                 },
                 "sodipodi:nodetypes=\"csssscsccscssscccc\"",
             ),

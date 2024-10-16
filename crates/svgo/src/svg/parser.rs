@@ -3,7 +3,7 @@
 use std::io::{BufReader, Read};
 
 use anyhow::Result;
-use xml::{namespace::Namespace, reader::XmlEvent, ParserConfig};
+use xml::{reader::XmlEvent, ParserConfig};
 
 use super::node::{Attribute, Element, ElementType, Node};
 
@@ -34,35 +34,10 @@ impl Parser {
                     els.push(node);
                 }
                 XmlEvent::StartElement {
-                    name,
-                    attributes,
-                    namespace,
+                    name, attributes, ..
                 } => {
-                    let mut attributes: Vec<Attribute> = attributes
-                        .iter()
-                        .map(|attr| Attribute::from(attr.to_owned()))
-                        .collect();
-
-                    if name.local_name == "svg" {
-                        let Namespace(btree) = namespace;
-                        btree.iter().for_each(|(k, v)| {
-                            if k == "xmlns" {
-                                // Introduced by the XML parser (xml-rs)
-                                return;
-                            }
-                            let key = if k.is_empty() {
-                                // Interestingly the XML parser (xml-rs) does not provide the
-                                // key for the default namespace. It is empty.
-                                "xmlns"
-                            } else {
-                                k
-                            };
-                            attributes.push(Attribute::Declaration {
-                                key: key.to_owned(),
-                                value: v.to_owned(),
-                            });
-                        });
-                    }
+                    let attributes: Vec<Attribute> =
+                        attributes.into_iter().map(Attribute::from).collect();
 
                     let element = Element {
                         r#type: ElementType::Open,

@@ -58,13 +58,10 @@ impl Writer {
                                 ),
                                 value: value.as_str(),
                             },
-                            Attribute::Declaration { key, value } => {
-                                println!("key: {key} value: {value}");
-                                xml::attribute::Attribute {
-                                    name: Name::local(key.as_str()),
-                                    value: value.as_str(),
-                                }
-                            }
+                            Attribute::Declaration { key, value } => xml::attribute::Attribute {
+                                name: Name::local(key.as_str()),
+                                value: value.as_str(),
+                            },
                         })
                         .collect();
 
