@@ -11,7 +11,7 @@ use svgo::optimizer::Optimization;
 #[command(
     name = "svgo",
     about = "SVG Optimizer",
-    author = "Esteban Borai <estebanborai@gmail.com> (https://github.com/EstebanBorai/svgo)",
+    author = "Esteban Borai <estebanborai@gmail.com> (https://github.com/LeoBorai)",
     next_line_help = true
 )]
 pub struct SvgoCli {
